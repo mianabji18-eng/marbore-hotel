@@ -25,14 +25,14 @@ import {
 // --- Placeholder Images ---
 // Nota: Reemplaza estas URLs con las rutas de tus imágenes reales subidas al servidor.
 const IMAGES = {
-  hero: "/public/hero.jpg",
-  room1: "/public/room1.1.jpg",
-  room2: "/public/room2.jpg",
-  pool: "/public/pool.jpg",
-  breakfast: "/public/breakfast.jpg",
-  terrace: "/public/restaurant.jpg",
-  bedroom: "/public/bedroom.jpg",
-  bathroom: "/public/bathroom.jpg"
+  hero: "/hero.jpg",
+  room1: "/room1.1.jpg",
+  room2: "/room2.jpg",
+  pool: "/pool.jpg",
+  breakfast: "/breakfast.jpg",
+  terrace: "/restaurant.jpg",
+  bedroom: "/bedroom.jpg",
+  bathroom: "/bathroom.jpg"
 };
 
 export default function App() {
