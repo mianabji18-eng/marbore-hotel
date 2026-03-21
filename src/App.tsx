@@ -193,7 +193,7 @@ export default function App() {
               className="flex-1"
             >
               <span className="text-marbore-gold text-xs tracking-[0.2em] uppercase mb-4 block">Alojamiento Premium</span>
-              <h3 className="font-serif text-4xl md:text-5xl mb-6">Suite con Terraza</h3>
+              <h3 className="font-serif text-4xl md:text-5xl mb-6">Suite Superior</h3>
               <p className="text-gray-600 mb-8 font-light leading-relaxed">
                 Espacios amplios y luminosos con vistas exclusivas. Equipada con cama King size, aire acondicionado, TV de pantalla plana y un baño privado con artículos de aseo gratuitos. El refugio perfecto tras un día de exploración.
               </p>
@@ -223,9 +223,9 @@ export default function App() {
               className="flex-1"
             >
               <span className="text-marbore-gold text-xs tracking-[0.2em] uppercase mb-4 block">Confort Total</span>
-              <h3 className="font-serif text-4xl md:text-5xl mb-6">Habitación Estándar</h3>
+              <h3 className="font-serif text-4xl md:text-5xl mb-6">Habitación Triple Estándar</h3>
               <p className="text-gray-600 mb-8 font-light leading-relaxed">
-                Diseño íntimo y acogedor. Disfrute de ropa de cama de alta calidad, minibar, conexión Wi-Fi gratuita y un ambiente libre de humo para garantizar su descanso absoluto.
+                Diseño íntimo y acogedor. Disfrute de ropa de cama de alta calidad, conexión Wi-Fi gratuita y un ambiente libre de humo para garantizar su descanso absoluto.
               </p>
               <a href="#" className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
                 Ver detalles <ChevronRight className="w-4 h-4" />
