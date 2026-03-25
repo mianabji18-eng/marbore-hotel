@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
+import GuestSelector from './components/GuestSelector';
 import { 
   Wifi, 
   Coffee, 
@@ -149,17 +150,7 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div className="flex-1 w-full flex items-center gap-4 border-b md:border-b-0 md:border-r border-marbore-dark/20 pb-4 md:pb-0 md:pr-6">
-            <Users className="text-marbore-gold w-6 h-6 shrink-0" />
-            <div className="flex flex-col w-full">
-              <span className="text-xs text-marbore-dark/70 uppercase tracking-wider mb-1">Huéspedes</span>
-              <select className="outline-none text-sm font-medium w-full bg-transparent appearance-none text-marbore-dark [&>option]:text-marbore-dark cursor-pointer">
-                <option>2 Adultos, 0 Niños</option>
-                <option>1 Adulto</option>
-                <option>2 Adultos, 1 Niño</option>
-              </select>
-            </div>
-          </div>
+          <GuestSelector />
           <button className="w-full md:w-auto bg-marbore-gold text-white px-8 py-4 rounded-lg text-sm tracking-widest uppercase hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2 shrink-0">
             Buscar <ChevronRight className="w-4 h-4" />
           </button>
@@ -197,9 +188,9 @@ export default function App() {
               <p className="text-gray-600 mb-8 font-light leading-relaxed">
                 Espacios amplios y luminosos con vistas exclusivas. Equipada con cama King size, aire acondicionado, TV de pantalla plana y un baño privado con artículos de aseo gratuitos. El refugio perfecto tras un día de exploración.
               </p>
-              <a href="#" className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
+              <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
                 Ver detalles <ChevronRight className="w-4 h-4" />
-              </a>
+              </Link>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
@@ -227,9 +218,9 @@ export default function App() {
               <p className="text-gray-600 mb-8 font-light leading-relaxed">
                 Diseño íntimo y acogedor. Disfrute de ropa de cama de alta calidad, conexión Wi-Fi gratuita y un ambiente libre de humo para garantizar su descanso absoluto.
               </p>
-              <a href="#" className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
+              <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
                 Ver detalles <ChevronRight className="w-4 h-4" />
-              </a>
+              </Link>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
@@ -242,6 +233,12 @@ export default function App() {
                 <img src={IMAGES.room2} alt="Habitación Estándar" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
               </div>
             </motion.div>
+          </div>
+          
+          <div className="mt-20 text-center">
+            <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
+              Ver habitaciones <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
