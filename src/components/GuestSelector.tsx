@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Users, Plus, Minus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function GuestSelector() {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [rooms, setRooms] = useState(1);
   const [adults, setAdults] = useState(2);
@@ -25,7 +27,7 @@ export default function GuestSelector() {
   const togglePopover = () => setIsOpen(!isOpen);
 
   // Text representation for the trigger
-  const summaryText = `${adults} Adulto${adults !== 1 ? 's' : ''}, ${children} Niño${children !== 1 ? 's' : ''}`;
+  const summaryText = `${t('guest.adults', { count: adults })}, ${children === 0 ? t('guest.children_zero') : t('guest.children', { count: children })}`;
 
   return (
     <div className="relative flex-1 w-full" ref={popoverRef}>
@@ -35,7 +37,7 @@ export default function GuestSelector() {
       >
         <Users className="text-marbore-gold w-6 h-6 shrink-0" />
         <div className="flex flex-col w-full">
-          <span className="text-xs text-marbore-dark/70 uppercase tracking-wider mb-1">Huéspedes</span>
+          <span className="text-xs text-marbore-dark/70 uppercase tracking-wider mb-1">{t('guest.title')}</span>
           <div className="outline-none text-sm font-medium w-full bg-transparent text-marbore-dark">
             {summaryText}
           </div>
@@ -50,7 +52,7 @@ export default function GuestSelector() {
           <div className="relative z-10 flex flex-col gap-6">
             {/* Habitación */}
             <div className="flex items-center justify-between">
-              <span className="text-base font-bold text-gray-800 tracking-wide">habitación</span>
+              <span className="text-base font-bold text-gray-800 tracking-wide">{t('guest.room')}</span>
               <div className="flex items-center gap-4">
                 <button 
                   onClick={() => setRooms(Math.max(1, rooms - 1))}
@@ -72,8 +74,8 @@ export default function GuestSelector() {
             {/* Adultos */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-base font-bold text-gray-800 tracking-wide">adultos</span>
-                <span className="text-sm text-gray-500 font-light mt-0.5">18 años o más</span>
+                <span className="text-base font-bold text-gray-800 tracking-wide">{t('guest.adults')}</span>
+                <span className="text-sm text-gray-500 font-light mt-0.5">{t('guest.adultsDesc')}</span>
               </div>
               <div className="flex items-center gap-4">
                 <button 
@@ -96,8 +98,8 @@ export default function GuestSelector() {
             {/* Niños */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-base font-bold text-gray-800 tracking-wide">niños</span>
-                <span className="text-sm text-gray-500 font-light mt-0.5">0-17 años</span>
+                <span className="text-base font-bold text-gray-800 tracking-wide">{t('guest.childrenLabel')}</span>
+                <span className="text-sm text-gray-500 font-light mt-0.5">{t('guest.childrenDesc')}</span>
               </div>
               <div className="flex items-center gap-4">
                 <button 

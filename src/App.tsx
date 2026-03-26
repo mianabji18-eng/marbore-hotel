@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import GuestSelector from './components/GuestSelector';
 import { 
   Wifi, 
@@ -20,7 +21,8 @@ import {
   ChevronRight,
   Menu,
   X,
-  MapPin
+  MapPin,
+  Globe
 } from 'lucide-react';
 
 // --- Placeholder Images ---
@@ -37,6 +39,7 @@ const IMAGES = {
 };
 
 export default function App() {
+  const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
@@ -49,6 +52,11 @@ export default function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'es' ? 'en' : 'es';
+    i18n.changeLanguage(newLang);
+  };
 
   return (
     <div className="min-h-screen bg-marbore-light overflow-hidden">
@@ -66,39 +74,61 @@ export default function App() {
           </div>
           
           <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 w-max">
-            {['El Hotel', 'Habitaciones', 'Servicios', 'Galería'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className={`text-sm tracking-widest uppercase hover:text-marbore-gold transition-colors ${isScrolled ? 'text-marbore-dark' : 'text-white'}`}>
-                {item}
+            {[{key: 'hotel', href: '#el hotel'}, {key: 'rooms', href: '#habitaciones'}, {key: 'services', href: '#servicios'}, {key: 'gallery', href: '#galería'}].map((item) => (
+              <a key={item.key} href={item.href} className={`text-sm tracking-widest uppercase hover:text-marbore-gold transition-colors ${isScrolled ? 'text-marbore-dark' : 'text-white'}`}>
+                {t(`nav.${item.key}`)}
               </a>
             ))}
             <Link to="/dashboard" className={`text-sm tracking-widest uppercase hover:text-marbore-gold transition-colors ${isScrolled ? 'text-marbore-dark' : 'text-white'}`}>
-              Dashboard
+              {t('nav.dashboard')}
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center z-10">
+          <div className="hidden md:flex items-center z-10 gap-4">
+            <button 
+              onClick={toggleLanguage}
+              className={`flex items-center gap-2 text-sm tracking-widest uppercase hover:text-marbore-gold transition-colors ${isScrolled ? 'text-marbore-dark' : 'text-white'}`}
+            >
+              <Globe className="w-4 h-4" />
+              {i18n.language === 'es' ? 'EN' : 'ES'}
+            </button>
             <button className="bg-marbore-gold text-white px-6 py-2 text-sm tracking-widest uppercase hover:bg-yellow-600 transition-colors">
-              Reservar
+              {t('nav.book')}
             </button>
           </div>
 
-          <button className="md:hidden text-white z-10" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X className={isScrolled ? 'text-marbore-dark' : 'text-white'} /> : <Menu className={isScrolled ? 'text-marbore-dark' : 'text-white'} />}
-          </button>
+          <div className="md:hidden flex items-center gap-4 z-10">
+            <button 
+              onClick={toggleLanguage}
+              className={`flex items-center gap-2 text-sm font-bold uppercase hover:text-marbore-gold transition-colors ${isScrolled ? 'text-marbore-dark' : 'text-white'}`}
+            >
+              <Globe className="w-4 h-4 md:hidden" />
+              <span className="sr-only">Toggle Language</span>
+            </button>
+            <button className="text-white md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X className={isScrolled ? 'text-marbore-dark' : 'text-white'} /> : <Menu className={isScrolled ? 'text-marbore-dark' : 'text-white'} />}
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-marbore-light pt-24 px-6 flex flex-col gap-6 md:hidden">
-          {['El Hotel', 'Habitaciones', 'Servicios', 'Galería'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setIsMobileMenuOpen(false)} className="font-serif text-3xl text-marbore-dark">
-              {item}
+          {[{key: 'hotel', href: '#el hotel'}, {key: 'rooms', href: '#habitaciones'}, {key: 'services', href: '#servicios'}, {key: 'gallery', href: '#galería'}].map((item) => (
+            <a key={item.key} href={item.href} onClick={() => setIsMobileMenuOpen(false)} className="font-serif text-3xl text-marbore-dark flex items-center justify-between">
+              {t(`nav.${item.key}`)}
             </a>
           ))}
           <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="font-serif text-3xl text-marbore-dark">
-            Dashboard
+            {t('nav.dashboard')}
           </Link>
+          <button 
+            onClick={() => { toggleLanguage(); setIsMobileMenuOpen(false); }}
+            className="font-serif text-3xl text-marbore-dark text-left flex items-center gap-4 mt-6"
+          >
+            <Globe className="w-8 h-8 text-marbore-gold" /> {i18n.language === 'es' ? 'Switch to English' : 'Cambiar a Español'}
+          </button>
         </div>
       )}
 
@@ -116,7 +146,7 @@ export default function App() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-white text-sm md:text-base tracking-[0.3em] uppercase mb-4"
           >
-            Bienvenido a tu refugio
+            {t('hero.welcome')}
           </motion.p>
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
@@ -124,7 +154,7 @@ export default function App() {
             transition={{ duration: 1, delay: 0.4 }}
             className="text-white font-serif text-6xl md:text-8xl lg:text-9xl mb-8 tracking-tight"
           >
-            MARBORÉ
+            {t('hero.title')}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -132,17 +162,18 @@ export default function App() {
             transition={{ duration: 1, delay: 0.8 }}
             className="text-white/80 font-serif italic text-xl md:text-2xl"
           >
-            Hotel Boutique
+            {t('hero.subtitle')}
           </motion.p>
         </div>
       </section>
+
       {/* Booking Widget */}
       <section className="relative z-30 -mt-20 max-w-5xl mx-auto px-6">
         <div className="bg-white/90 backdrop-blur-md border border-white/50 p-6 rounded-xl shadow-2xl flex flex-col md:flex-row items-center gap-6 justify-between">
           <div className="flex-1 w-full flex items-center gap-4 border-b md:border-b-0 md:border-r border-marbore-dark/20 pb-4 md:pb-0 md:pr-6">
             <Calendar className="text-marbore-gold w-6 h-6 shrink-0" />
             <div className="flex flex-col w-full">
-              <span className="text-xs text-marbore-dark/70 uppercase tracking-wider mb-1">Llegada - Salida</span>
+              <span className="text-xs text-marbore-dark/70 uppercase tracking-wider mb-1">{t('booking.checkInOut')}</span>
               <div className="flex items-center gap-2">
                 <input type="date" className="outline-none text-sm font-medium w-full bg-transparent text-marbore-dark cursor-pointer" />
                 <span className="text-marbore-dark/50">-</span>
@@ -152,7 +183,7 @@ export default function App() {
           </div>
           <GuestSelector />
           <button className="w-full md:w-auto bg-marbore-gold text-white px-8 py-4 rounded-lg text-sm tracking-widest uppercase hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2 shrink-0">
-            Buscar <ChevronRight className="w-4 h-4" />
+            {t('booking.search')} <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </section>
@@ -165,14 +196,14 @@ export default function App() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="font-serif text-4xl md:text-5xl mb-8 text-marbore-dark">Una experiencia de confort y elegancia</h2>
+          <h2 className="font-serif text-4xl md:text-5xl mb-8 text-marbore-dark">{t('about.title')}</h2>
           <p className="text-lg text-gray-600 leading-relaxed font-light">
-            Descubra el equilibrio perfecto entre diseño moderno y calidez hogareña. En Marboré Hotel Boutique, cada detalle ha sido cuidadosamente seleccionado para ofrecerle una estancia inolvidable. Disfrute de nuestras instalaciones de primera clase, desde nuestra relajante piscina interior hasta nuestra terraza solárium, todo diseñado para su máximo bienestar.
+            {t('about.description')}
           </p>
         </motion.div>
       </section>
 
-      {/* Featured Rooms (Editorial Layout) */}
+      {/* Featured Rooms */}
       <section id="habitaciones" className="py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center gap-16 mb-32">
@@ -183,13 +214,13 @@ export default function App() {
               transition={{ duration: 0.8 }}
               className="flex-1"
             >
-              <span className="text-marbore-gold text-xs tracking-[0.2em] uppercase mb-4 block">Alojamiento Premium</span>
-              <h3 className="font-serif text-4xl md:text-5xl mb-6">Suite Superior</h3>
+              <span className="text-marbore-gold text-xs tracking-[0.2em] uppercase mb-4 block">{t('featured.premium')}</span>
+              <h3 className="font-serif text-4xl md:text-5xl mb-6">{t('featured.suite')}</h3>
               <p className="text-gray-600 mb-8 font-light leading-relaxed">
-                Espacios amplios y luminosos con vistas exclusivas. Equipada con cama King size, aire acondicionado, TV de pantalla plana y un baño privado con artículos de aseo gratuitos. El refugio perfecto tras un día de exploración.
+                {t('featured.suiteDesc')}
               </p>
               <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
-                Ver detalles <ChevronRight className="w-4 h-4" />
+                {t('featured.viewDetails')} <ChevronRight className="w-4 h-4" />
               </Link>
             </motion.div>
             <motion.div 
@@ -213,13 +244,13 @@ export default function App() {
               transition={{ duration: 0.8 }}
               className="flex-1"
             >
-              <span className="text-marbore-gold text-xs tracking-[0.2em] uppercase mb-4 block">Confort Total</span>
-              <h3 className="font-serif text-4xl md:text-5xl mb-6">Habitación Triple Estándar</h3>
+              <span className="text-marbore-gold text-xs tracking-[0.2em] uppercase mb-4 block">{t('featured.comfort')}</span>
+              <h3 className="font-serif text-4xl md:text-5xl mb-6">{t('featured.standard')}</h3>
               <p className="text-gray-600 mb-8 font-light leading-relaxed">
-                Diseño íntimo y acogedor. Disfrute de ropa de cama de alta calidad, conexión Wi-Fi gratuita y un ambiente libre de humo para garantizar su descanso absoluto.
+                {t('featured.standardDesc')}
               </p>
               <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
-                Ver detalles <ChevronRight className="w-4 h-4" />
+                {t('featured.viewDetails')} <ChevronRight className="w-4 h-4" />
               </Link>
             </motion.div>
             <motion.div 
@@ -237,7 +268,7 @@ export default function App() {
           
           <div className="mt-20 text-center">
             <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center gap-2 text-sm tracking-widest uppercase border-b border-marbore-dark pb-1 hover:text-marbore-gold hover:border-marbore-gold transition-colors">
-              Ver habitaciones <ChevronRight className="w-4 h-4" />
+              {t('featured.viewAll')} <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -247,18 +278,18 @@ export default function App() {
       <section id="servicios" className="py-32 bg-marbore-light">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="font-serif text-4xl md:text-5xl mb-4 text-marbore-dark">Servicios e Instalaciones</h2>
-            <p className="text-gray-500 font-light">Todo lo que necesita para una estancia perfecta.</p>
+            <h2 className="font-serif text-4xl md:text-5xl mb-4 text-marbore-dark">{t('servicesTitle')}</h2>
+            <p className="text-gray-500 font-light">{t('servicesSubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
             {[
-              { icon: <Wifi />, title: "Conectividad", desc: "Wi-Fi gratuito de alta velocidad en todo el establecimiento." },
-              { icon: <Waves />, title: "Bienestar", desc: "Piscina interior abierta todo el año y bañera de hidromasaje/jacuzzi." },
-              { icon: <Utensils />, title: "Gastronomía", desc: "Restaurante, bar, desayuno en la habitación y menús para dietas especiales." },
-              { icon: <Wind />, title: "Confort", desc: "Aire acondicionado, habitaciones sin humo y servicio de limpieza diario." },
-              { icon: <ShieldCheck />, title: "Seguridad", desc: "Recepción 24 horas, cámaras de seguridad y acceso con tarjeta." },
-              { icon: <Coffee />, title: "Extras", desc: "Terraza solárium, servicio de conserjería e información turística." }
+              { icon: <Wifi />, title: t('services.connectivity'), desc: t('services.connectivityDesc') },
+              { icon: <Waves />, title: t('services.wellness'), desc: t('services.wellnessDesc') },
+              { icon: <Utensils />, title: t('services.gastronomy'), desc: t('services.gastronomyDesc') },
+              { icon: <Wind />, title: t('services.comfortTitle'), desc: t('services.comfortDesc') },
+              { icon: <ShieldCheck />, title: t('services.security'), desc: t('services.securityDesc') },
+              { icon: <Coffee />, title: t('services.extras'), desc: t('services.extrasDesc') }
             ].map((service, idx) => (
               <motion.div 
                 key={idx}
@@ -282,7 +313,7 @@ export default function App() {
       {/* Image Gallery Marquee/Grid */}
       <section id="galería" className="py-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 mb-12">
-          <h2 className="font-serif text-4xl md:text-5xl">Nuestros Espacios</h2>
+          <h2 className="font-serif text-4xl md:text-5xl">{t('gallery.title')}</h2>
         </div>
         <div className="flex overflow-hidden py-4">
           <div className="flex gap-4 animate-marquee px-4">
@@ -309,37 +340,37 @@ export default function App() {
               <span className="font-serif text-xl tracking-widest uppercase">Marboré</span>
             </div>
             <p className="text-gray-400 text-sm font-light leading-relaxed mb-6">
-              Su hotel boutique de confianza. Un oasis de tranquilidad y buen gusto diseñado para hacer de su viaje una experiencia memorable.
+              {t('footer.description')}
             </p>
             <div className="flex gap-4 text-sm text-gray-400">
-              <span>Idiomas: Español, Inglés</span>
+              <span>{t('footer.languages')}</span>
             </div>
           </div>
           
           <div>
-            <h4 className="font-serif text-lg mb-6 tracking-wider">Contacto</h4>
+            <h4 className="font-serif text-lg mb-6 tracking-wider">{t('footer.contact')}</h4>
             <ul className="space-y-4 text-sm text-gray-400 font-light">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-marbore-gold shrink-0" />
-                <span>Cl. 21 #3 - 96, Comuna 2<br/>Santa Marta, Magdalena</span>
+                <span>{t('footer.address_1')}<br/>{t('footer.address_2')}</span>
               </li>
-              <li>Teléfono: +57 300 560 6643</li>
-              <li>Email: reservas@marborehotel.com</li>
+              <li>{t('footer.phone')}</li>
+              <li>{t('footer.email')}</li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6 tracking-wider">Políticas</h4>
+            <h4 className="font-serif text-lg mb-6 tracking-wider">{t('footer.policies')}</h4>
             <ul className="space-y-3 text-sm text-gray-400 font-light">
-              <li><a href="#" className="hover:text-white transition-colors">Términos y Condiciones</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Política de Privacidad</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Prohibido fumar en todo el alojamiento</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">No hay parking disponible</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.noSmoking')}</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.noParking')}</a></li>
             </ul>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-white/10 text-center text-xs text-gray-500 tracking-widest uppercase">
-          © {new Date().getFullYear()} Marboré Hotel Boutique. Todos los derechos reservados.
+          {t('footer.rights')}
         </div>
       </footer>
     </div>
