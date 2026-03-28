@@ -16,6 +16,7 @@ import {
   ShowerHead,
   Globe
 } from 'lucide-react';
+import BookingModal from './BookingModal';
 
 const IMAGES = {
   hero: "/hero.jpg",
@@ -70,11 +71,26 @@ const ROOMS_BASE = [
   }
 ];
 
-const RoomCard: React.FC<{ roomBase: any, idx: number }> = ({ roomBase, idx }) => {
+const RoomCard: React.FC<{ roomBase: any, idx: number, onBook: (roomData: any) => void }> = ({ roomBase, idx, onBook }) => {
   const { t } = useTranslation();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const roomText = t(`roomsPage.roomsList.${roomBase.key}`, { returnObjects: true }) as any;
+
+  const handleBook = () => {
+    // Extract base price correctly using regex to get digits
+    const priceRaw = parseInt(roomText.price.replace(/[^\d]/g, '')) || 0;
+    
+    onBook({
+      id: roomBase.id,
+      key: roomBase.key,
+      name: roomText.name,
+      priceText: roomText.price,
+      priceRaw,
+      image: roomBase.images[0]
+    });
+  };
 
   const nextImage = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -113,14 +129,14 @@ const RoomCard: React.FC<{ roomBase: any, idx: number }> = ({ roomBase, idx }) =
           <>
             <button 
               onClick={prevImage}
-              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full opacity-0 group-hover/gallery:opacity-100 transition-all shadow-md z-10"
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full opacity-100 md:opacity-0 md:group-hover/gallery:opacity-100 transition-all shadow-md z-10"
               aria-label={t('roomsPage.imagePrev')}
             >
               <ChevronLeft size={20} className="text-marbore-dark" />
             </button>
             <button 
               onClick={nextImage}
-              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full opacity-0 group-hover/gallery:opacity-100 transition-all shadow-md z-10"
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full opacity-100 md:opacity-0 md:group-hover/gallery:opacity-100 transition-all shadow-md z-10"
               aria-label={t('roomsPage.imageNext')}
             >
               <ChevronRight size={20} className="text-marbore-dark" />
@@ -147,16 +163,21 @@ const RoomCard: React.FC<{ roomBase: any, idx: number }> = ({ roomBase, idx }) =
           </>
         )}
 
-        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-3 group/tooltip z-20">
+        <div 
+          className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-3 group/tooltip z-20 cursor-pointer md:cursor-default"
+          onClick={() => setShowTooltip(!showTooltip)}
+          onMouseEnter={() => setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        >
           <span className="font-serif text-marbore-dark font-medium">{roomText.price}</span>
           <div className="h-4 w-[1px] bg-marbore-dark/20" />
-          <div className="flex items-center gap-1.5 text-marbore-dark cursor-help">
+          <div className="flex items-center gap-1.5 text-marbore-dark">
             <Users size={16} />
             <span className="font-medium text-sm">{roomBase.capacity}</span>
           </div>
           
           {/* Tooltip */}
-          <div className="absolute top-full mt-2 right-0 bg-marbore-dark text-white text-xs px-3 py-2 rounded shadow-xl opacity-0 group-hover/tooltip:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 transform translate-y-1 group-hover/tooltip:translate-y-0">
+          <div className={`absolute top-full mt-2 right-0 bg-marbore-dark text-white text-xs px-3 py-2 rounded shadow-xl transition-all duration-300 pointer-events-none whitespace-nowrap z-50 transform ${showTooltip ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'}`}>
             {roomText.capacityText}
             {/* Arrow up */}
             <div className="absolute -top-1 right-8 w-2 h-2 bg-marbore-dark transform rotate-45" />
@@ -179,7 +200,10 @@ const RoomCard: React.FC<{ roomBase: any, idx: number }> = ({ roomBase, idx }) =
               <span key={i} className="hover:text-marbore-gold transition-colors">{icon}</span>
             ))}
           </div>
-          <button className="bg-marbore-dark text-white px-6 py-2 text-xs tracking-widest uppercase hover:bg-marbore-gold transition-colors rounded">
+          <button 
+            onClick={handleBook}
+            className="bg-marbore-dark text-white px-6 py-2 text-xs tracking-widest uppercase hover:bg-marbore-gold transition-colors rounded"
+          >
             {t('roomsPage.book')}
           </button>
         </div>
@@ -191,6 +215,8 @@ const RoomCard: React.FC<{ roomBase: any, idx: number }> = ({ roomBase, idx }) =
 export default function Habitaciones() {
   const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<any | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -266,10 +292,24 @@ export default function Habitaciones() {
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
           {ROOMS_BASE.map((roomBase, idx) => (
-            <RoomCard key={roomBase.id} roomBase={roomBase} idx={idx} />
+            <RoomCard 
+              key={roomBase.id} 
+              roomBase={roomBase} 
+              idx={idx} 
+              onBook={(data) => {
+                setSelectedRoom(data);
+                setIsModalOpen(true);
+              }} 
+            />
           ))}
         </div>
       </section>
+
+      <BookingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        roomData={selectedRoom} 
+      />
 
       {/* Footer */}
       <footer className="bg-marbore-dark text-white py-20">

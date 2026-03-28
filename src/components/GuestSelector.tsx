@@ -2,12 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Users, Plus, Minus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export default function GuestSelector() {
+interface GuestSelectorProps {
+  onChange?: (guests: { rooms: number; adults: number; children: number }) => void;
+}
+
+export default function GuestSelector({ onChange }: GuestSelectorProps = {}) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [rooms, setRooms] = useState(1);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
+
+  useEffect(() => {
+    onChange?.({ rooms, adults, children });
+  }, [rooms, adults, children, onChange]);
 
   const popoverRef = useRef<HTMLDivElement>(null);
 

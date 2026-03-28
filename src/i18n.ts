@@ -121,6 +121,37 @@ const resources = {
             "capacityText": "For 2 people"
           }
         }
+      },
+      "bookingModal": {
+        "title": "Book Your Stay",
+        "checkIn": "Check-In Date",
+        "checkOut": "Check-Out Date",
+        "continue": "Continue to Booking",
+        "cancel": "Cancel",
+        "errorDates": "Please select valid check-in and check-out dates."
+      },
+      "checkout": {
+        "title": "Complete Your Reservation",
+        "guestDetails": "Guest Details",
+        "name": "First Name",
+        "surname": "Last Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "terms": "Terms and Conditions",
+        "termsDesc": "By completing this booking, you agree to our policies. Cancellations are free up to 48 hours before check-in. Local and foreign tourists are subject to applicable taxes.",
+        "payment": "Payment Method",
+        "cardNumber": "Card Number",
+        "expiry": "MM/YY",
+        "cvc": "CVC",
+        "confirm": "Confirm Booking",
+        "summary": "Booking Summary",
+        "nights": "{{count}} night",
+        "nights_plural": "{{count}} nights",
+        "extras": "Extras & Services",
+        "airportPickup": "Airport Pickup",
+        "transport": "Private Transport",
+        "total": "Total Amount",
+        "success": "Booking successful! We have sent a confirmation email."
       }
     }
   },
@@ -243,6 +274,37 @@ const resources = {
             "capacityText": "Para 2 personas"
           }
         }
+      },
+      "bookingModal": {
+        "title": "Reserva tu Estancia",
+        "checkIn": "Fecha de Entrada",
+        "checkOut": "Fecha de Salida",
+        "continue": "Continuar a Reserva",
+        "cancel": "Cancelar",
+        "errorDates": "Por favor, seleccione fechas válidas de entrada y salida."
+      },
+      "checkout": {
+        "title": "Complete su Reserva",
+        "guestDetails": "Datos del Huésped",
+        "name": "Nombre",
+        "surname": "Apellidos",
+        "email": "Correo Electrónico",
+        "phone": "Teléfono",
+        "terms": "Términos y Condiciones",
+        "termsDesc": "Al completar esta reserva, acepta nuestras políticas. Las cancelaciones son gratuitas hasta 48 horas antes del check-in. Turistas locales y extranjeros están sujetos a los impuestos aplicables.",
+        "payment": "Método de Pago",
+        "cardNumber": "Número de Tarjeta",
+        "expiry": "MM/AA",
+        "cvc": "CVC",
+        "confirm": "Confirmar Reserva",
+        "summary": "Resumen de Reserva",
+        "nights": "{{count}} noche",
+        "nights_plural": "{{count}} noches",
+        "extras": "Extras y Servicios",
+        "airportPickup": "Recogida en Aeropuerto",
+        "transport": "Transporte Privado",
+        "total": "Total a Pagar",
+        "success": "¡Reserva exitosa! Hemos enviado un correo de confirmación."
       }
     }
   }

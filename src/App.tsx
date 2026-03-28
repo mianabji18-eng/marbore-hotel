@@ -92,9 +92,9 @@ export default function App() {
               <Globe className="w-4 h-4" />
               {i18n.language === 'es' ? 'EN' : 'ES'}
             </button>
-            <button className="bg-marbore-gold text-white px-6 py-2 text-sm tracking-widest uppercase hover:bg-yellow-600 transition-colors">
+            <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="bg-marbore-gold text-white px-6 py-2 text-sm tracking-widest uppercase hover:bg-yellow-600 transition-colors">
               {t('nav.book')}
-            </button>
+            </Link>
           </div>
 
           <div className="md:hidden flex items-center gap-4 z-10">
@@ -182,9 +182,9 @@ export default function App() {
             </div>
           </div>
           <GuestSelector />
-          <button className="w-full md:w-auto bg-marbore-gold text-white px-8 py-4 rounded-lg text-sm tracking-widest uppercase hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2 shrink-0">
+          <Link to="/habitaciones" onClick={() => window.scrollTo(0, 0)} className="w-full md:w-auto bg-marbore-gold text-white px-8 py-4 rounded-lg text-sm tracking-widest uppercase hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2 shrink-0">
             {t('booking.search')} <ChevronRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </section>
 
