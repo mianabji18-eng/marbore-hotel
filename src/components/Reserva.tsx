@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, Info, Check, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, Info, Check, ShieldCheck, CheckCircle2, MapPin, Globe } from 'lucide-react';
 
 export default function Reserva() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [extras, setExtras] = useState({
     airportPickup: false,
@@ -22,6 +23,19 @@ export default function Reserva() {
     }
     window.scrollTo(0, 0);
   }, [room, navigate]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'es' ? 'en' : 'es';
+    i18n.changeLanguage(newLang);
+  };
 
   if (!room) return null;
 
@@ -59,8 +73,36 @@ export default function Reserva() {
   }
 
   return (
-    <div className="min-h-screen bg-marbore-light pt-24 pb-20 font-sans">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen bg-marbore-light font-sans flex flex-col">
+      {/* Navigation */}
+      <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/90 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'}`}>
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
+          <Link to="/" className="flex items-center gap-2 z-10 hover:opacity-80 transition-opacity text-marbore-dark">
+            <ChevronLeft size={20} />
+            <span className="font-serif text-sm tracking-widest uppercase">
+              {t('roomsPage.backHome')}
+            </span>
+          </Link>
+          
+          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-max">
+            <span className="font-serif text-xl tracking-widest uppercase text-marbore-dark">
+              Marboré
+            </span>
+          </div>
+
+          <div className="flex items-center z-10">
+            <button 
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-marbore-gold transition-colors text-marbore-dark"
+            >
+              <Globe className="w-4 h-4" />
+              {i18n.language === 'es' ? 'EN' : 'ES'}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div className="flex-1 pt-32 pb-20 max-w-7xl mx-auto px-6 w-full">
         <div className="mb-8">
           <button 
             onClick={() => navigate(-1)}
@@ -212,6 +254,51 @@ export default function Reserva() {
 
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-marbore-dark text-white py-20 mt-auto">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-white">
+                <span className="font-serif font-bold text-sm">M</span>
+              </div>
+              <span className="font-serif text-xl tracking-widest uppercase">Marboré</span>
+            </div>
+            <p className="text-gray-400 text-sm font-light leading-relaxed mb-6">
+              {t('footer.description')}
+            </p>
+            <div className="flex gap-4 text-sm text-gray-400">
+              <span>{t('footer.languages')}</span>
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="font-serif text-lg mb-6 tracking-wider">{t('footer.contact')}</h4>
+            <ul className="space-y-4 text-sm text-gray-400 font-light">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-marbore-gold shrink-0" />
+                <span>{t('footer.address_1')}<br/>{t('footer.address_2')}</span>
+              </li>
+              <li>{t('footer.phone')}</li>
+              <li>{t('footer.email')}</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-serif text-lg mb-6 tracking-wider">{t('footer.policies')}</h4>
+            <ul className="space-y-3 text-sm text-gray-400 font-light">
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.noSmoking')}</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">{t('footer.noParking')}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-white/10 text-center text-xs text-gray-500 tracking-widest uppercase">
+          {t('footer.rights')}
+        </div>
+      </footer>
     </div>
   );
 }
