@@ -64,10 +64,8 @@ export default function App() {
       <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/90 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
           <div className="flex items-center gap-2 z-10">
-            {/* Logo Icon Mockup */}
-            <div className={`w-8 h-8 flex items-center justify-center rounded-full border-2 ${isScrolled ? 'border-marbore-dark text-marbore-dark' : 'border-white text-white'}`}>
-              <span className="font-serif font-bold text-sm">M</span>
-            </div>
+            {/* Logo Icon */}
+            <img src="/logo.png" alt="Marboré Logo" className="w-12 h-12 object-contain shrink-0 drop-shadow-md" />
             <span className={`font-serif text-xl tracking-widest uppercase ${isScrolled ? 'text-marbore-dark' : 'text-white'}`}>
               Marboré
             </span>
@@ -334,9 +332,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-white">
-                <span className="font-serif font-bold text-sm">M</span>
-              </div>
+              <img src="/logo.png" alt="Marboré Logo" className="w-12 h-12 object-contain shrink-0" />
               <span className="font-serif text-xl tracking-widest uppercase">Marboré</span>
             </div>
             <p className="text-gray-400 text-sm font-light leading-relaxed mb-6">
